@@ -12,8 +12,7 @@ This tool is on PyPI, so you can easily install it with
 pip install enarguswiki
 ```
 
-> [! NOTE]
-> Only tested on MacOS. Should work on other platforms as well.
+**Note:** Only tested on MacOS. Should work on other platforms as well.
 
 # Usage
 
