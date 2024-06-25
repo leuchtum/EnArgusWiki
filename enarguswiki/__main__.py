@@ -41,6 +41,7 @@ class FileFormat(str, Enum):
     SUMMARY = "summary"
     JSON = "json"
     PDF = "pdf"
+    BIBTEX = "bibtex"
 
 
 class Lang(str, Enum):
@@ -169,6 +170,13 @@ def page(
                     typer.echo(pdf_data.getvalue())
                 else:
                     save_to_file(page.name, out, pdf_data.getvalue(), ".pdf", mode="wb")
+
+            case FileFormat.BIBTEX:
+                bibtex_data = page.to_bibtex()
+                if out is None:
+                    typer.echo(bibtex_data)
+                else:
+                    save_to_file(page.name, out, bibtex_data, ".bib")
 
 
 class CallbackProgressBar:

@@ -2,12 +2,14 @@ from __future__ import annotations
 
 import urllib.parse
 from contextlib import contextmanager
+from datetime import date
 from io import BytesIO
 from pathlib import Path
 from typing import IO, Any, Callable, Iterator
 
 import html5lib
 import requests
+from jinja2 import Environment, FileSystemLoader, select_autoescape
 from pydantic import BaseModel, Field, ValidationError
 from xhtml2pdf import pisa
 
@@ -106,6 +108,20 @@ class Page(BaseModel):
 
     def to_json(self) -> str:
         return self.model_dump_json()
+
+    def to_bibtex(self) -> str:
+        template = Environment(
+            loader=FileSystemLoader(Path(__file__).parent),
+            autoescape=select_autoescape(),
+        ).get_template("bibtex.j2")
+        de_name = self.translate_to("de").name
+        return template.render(
+            key=f"enarguswiki_{self.oid}",
+            oid=self.oid,
+            name=self.name,
+            name_urlified=urllib.parse.quote(de_name),
+            urldate=date.today().strftime("%Y-%m-%d"),
+        )
 
 
 class PageCollection(BaseModel):
